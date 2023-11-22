@@ -155,7 +155,7 @@ if os.path.exists('./dataset.csv'):
 with st.sidebar:
     st.image("https://www.onepointltd.com/wp-content/uploads/2020/03/inno2.png")
     st.title("RecomendML")
-    choice2 = st.radio("Select an Option", ["Recommendation System","Data Visualization"])
+    choice2 = st.radio("Select an Option", ["Recommendation System"]) #,"Data Visualization"
 
     # Depending on the selected option, you can show specific content
     if choice2 == "Data Visualization":
@@ -259,28 +259,41 @@ if choice=="Movie & music":
     with tab2:
         tab3, tab4 = st.tabs(["Movie", "Music"])
         with tab3:
+            try:
+                rec1 = random.choice(result)
+            except Exception as e:
+                rec1  = ""
+                pass
+            st.subheader("Recomendation from previous tab:-")
+            st.write(rec1)
             st.header("Watch Similar Movies")
+            z = movies['title'].values
+            print(np.where(z == rec1)[0])
+            rec1_ = np.where(z == rec1)[0]
             selected_movie_name = st.selectbox(
                 'Choose the Parent Movie?',
-                (movies['title'].values))
+                (movies['title'].values) ,index= int(rec1_[0]) if rec1_ else 0)
             if st.button('Recommend'):
-                names, poster = recommend(selected_movie_name)
-                col1, col2, col3, col4, col5 = st.columns(5)
-                with col1:
-                    st.text(names[0])
-                    st.image(poster[0])
-                with col2:
-                    st.text(names[1])
-                    st.image(poster[1])
-                with col3:
-                    st.text(names[2])
-                    st.image(poster[2])
-                with col4:
-                    st.text(names[3])
-                    st.image(poster[3])
-                with col5:
-                    st.text(names[4])
-                    st.image(poster[4])
+                try:
+                    names, poster = recommend(selected_movie_name)
+                    col1, col2, col3, col4, col5 = st.columns(5)
+                    with col1:
+                        st.text(names[0])
+                        st.image(poster[0])
+                    with col2:
+                        st.text(names[1])
+                        st.image(poster[1])
+                    with col3:
+                        st.text(names[2])
+                        st.image(poster[2])
+                    with col4:
+                        st.text(names[3])
+                        st.image(poster[3])
+                    with col5:
+                        st.text(names[4])
+                        st.image(poster[4])
+                except Exception as e:
+                    st.write("Dataset limited so no similar movies found try again!!!")
         with tab4:
             st.header('listen According To the Music you Like')
             music = pickle.load(open('df.pkl', 'rb'))
