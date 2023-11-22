@@ -88,7 +88,7 @@ CLIENT_SECRET = "4d6710460d764fbbb8d8753dc094d131"
 client_credentials_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-model = load_model("./Emotion_Detection/best_model.h5")
+# model = load_model("./Emotion_Detection/best_model.h5")
 
 
 face_haar_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -154,8 +154,8 @@ if os.path.exists('./dataset.csv'):
 
 with st.sidebar:
     st.image("https://www.onepointltd.com/wp-content/uploads/2020/03/inno2.png")
-    st.title("AutoML")
-    choice2 = st.radio("Select an Option", ["Recommendation System"])
+    st.title("RecomendML")
+    choice2 = st.radio("Select an Option", ["Recommendation System","Data Visualization"])
 
     # Depending on the selected option, you can show specific content
     if choice2 == "Data Visualization":
@@ -167,7 +167,7 @@ with st.sidebar:
 
     elif choice2 == "Recommendation System":
         choice = st.radio("Choose a Recommendation System option", ["Movie & music","Food"])
-        st.info("This project application helps you Get Movie and Music reccomendation by learning your mood Through facial expression.")
+        st.info("This project application helps you Get Movie,Music and Food reccomendation by learning your mood Through facial expression.")
 
 if choice == "Upload":
     st.title("Upload Your Dataset")
@@ -220,7 +220,10 @@ if choice == "Modelling":
             st.download_button('Download Model', f, file_name="best_model.pkl")
 
 if choice=="Movie & music":
-    st.title('Movie & Music Recommender System')
+    st.header('RecommendML')
+    st.subheader("Movie & Music 🍿")
+    st.write("Harmony in Every Frame, Rhythm in Every Note: Your Personal Movie and Music Maestro!")
+
 
     tab1,tab2 = st.tabs(["capture","recommend"])
 
@@ -256,9 +259,9 @@ if choice=="Movie & music":
     with tab2:
         tab3, tab4 = st.tabs(["Movie", "Music"])
         with tab3:
-            st.header("Movie Recommender System")
+            st.header("Watch Similar Movies")
             selected_movie_name = st.selectbox(
-                'How would you like to be contacted?',
+                'Choose the Parent Movie?',
                 (movies['title'].values))
             if st.button('Recommend'):
                 names, poster = recommend(selected_movie_name)
@@ -279,7 +282,7 @@ if choice=="Movie & music":
                     st.text(names[4])
                     st.image(poster[4])
         with tab4:
-            st.header('Music Recommender System')
+            st.header('listen According To the Music you Like')
             music = pickle.load(open('df.pkl', 'rb'))
             similarity = pickle.load(open('similarity.pkl', 'rb'))
 
@@ -310,8 +313,9 @@ if choice=="Movie & music":
                     st.image(recommended_music_posters[4])
 
 if choice == "Food":
+    st.header('RecommendML')
+    st.subheader("Get some Food 😋")
 
-    st.title("Food Recommendation System")
     st.text("Let us help you with ordering")
     st.image("foood.jpeg")
 
